@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Dashboard</title>
+    <!-- Tailwind CSS CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <!-- ApexCharts CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+</head>
+<body class="bg-gray-100 flex">
+
+<!-- Sidebar -->
+<div id="sidebar" class="bg-gray-800 text-white w-64 h-screen fixed top-0 left-0 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out">
+    <div class="p-6">
+        <h2 class="text-2xl font-semibold">Dashboard</h2>
+        <ul class="mt-4">
+            <li class="mb-4 hover:bg-gray-700 p-2 rounded-md">
+                <a href="javascript:void(0)" onclick="showDetails('Project Alpha')">Project Alpha</a>
+            </li>
+            <li class="mb-4 hover:bg-gray-700 p-2 rounded-md">
+                <a href="javascript:void(0)" onclick="">Project Beta</a>
+            </li>
+            <!-- Add more items as necessary -->
+        </ul>
+    </div>
+</div>
+
+<!-- Main Content -->
+<div class="flex-1 ml-0 md:ml-64 transition-all duration-300 ease-in-out">
+    <!-- Mobile Sidebar Toggle Button -->
+    <button id="sidebar-toggle" class="md:hidden p-4 text-gray-800">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+        </svg>
+    </button>
+
+    <div class="container mx-auto p-6">
+    <!-- Projects Table --> 
+<div id="projects-table" class="bg-white shadow-lg rounded-lg overflow-hidden">
+    <h2 class="text-2xl font-semibold text-gray-800 p-4">Projects</h2>
+    <table class="w-full text-left text-gray-700">
+        <thead>
+            <tr class="bg-gray-200 text-gray-800">
+                <th class="py-3 px-6">Project Name</th>
+                <th class="py-3 px-6">Category</th>
+                <th class="py-3 px-6">Status</th>
+                <th class="py-3 px-6">Add</th>
+                <th class="py-3 px-6">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="cursor-pointer hover:bg-gray-100" >
+                <td class="py-3 px-6" onclick="showDetails('Project Alpha')">Support to RA 9003 Projects of 11 Brgys ahsdihgadiga asgdia gdiah</td>
+                <td class="py-3 px-6" onclick="showDetails('Project Alpha')">Development</td>
+                <td class="py-3 px-6" onclick="showDetails('Project Alpha')">Ongoing</td>
+                <td class="py-3 px-6">
+                    <button class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600" onclick="showBudgetForm()">Budget</button>
+                    <button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-2" onclick="showObligationForm()">Obligation</button>
+                </td>
+                <td class="py-3 px-6">
+                    <button class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600">Update</button>
+                    <button class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 mt-2">Delete</button>
+                </td>
+            </tr>
+            <!-- More rows as needed -->
+        </tbody>
+    </table>
+</div>
+
+
+        
+        <!-- Project Details Section -->
+        <div id="details-section" class="hidden mt-8 max-w-6xl mx-auto p-6 bg-white shadow-lg rounded-lg">
+            <button onclick="hideDetails()" class="text-gray-500 hover:text-gray-800">&larr; Back to Projects</button>
+            
+            <!-- Header Section -->
+            <div class="flex items-center space-x-4 mt-4">
+                <img src="https://via.placeholder.com/80" alt="Project Image" class="w-20 h-20 rounded-full object-cover">
+                <div>
+                    <h2 id="project-title" class="text-2xl font-bold text-gray-800"></h2>
+                    <p class="text-gray-500">Category: <span id="project-category">Development</span></p>
+                </div>
+            </div>
+
+            <!-- Content Section -->
+            <div class="mt-6 grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Details Section -->
+                <div class="lg:col-span-2">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">Project Details</h3>
+                    <ul class="grid grid-cols-2 gap-x-8 gap-y-2 text-gray-600">
+                        <li><span class="font-bold">Start Date:</span> January 1, 2024</li>
+                        <li><span class="font-bold">End Date:</span> December 31, 2024</li>
+                        <li><span class="font-bold">Budget:</span> $500,000</li>
+                        <li><span class="font-bold">Status:</span> Ongoing</li>
+                    </ul>
+                </div>
+                
+                <!-- Chart Section -->
+                <div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">Utilization Rate</h3>
+                    <div id="chart" class="w-full h-56 bg-gray-100 rounded-lg"></div>
+                </div>
+            </div>
+            
+            <!-- Additional Tables Section -->
+            <div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
+                <!-- Table 1 -->
+                <div class="bg-white shadow rounded-lg overflow-hidden h-48">
+                    <h3 class="text-lg font-semibold text-gray-800 p-4">Table 1</h3>
+                    <div class="overflow-y-auto h-full px-4">
+                        <table class="w-full text-left text-gray-600">
+                            <thead>
+                                <tr class="text-gray-800">
+                                    <th class="py-2">Column 1</th>
+                                    <th class="py-2">Column 2</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td class="py-2">Row 1</td><td class="py-2">Data</td></tr>
+                                <tr><td class="py-2">Row 2</td><td class="py-2">Data</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Table 2 -->
+                <div class="bg-white shadow rounded-lg overflow-hidden h-48">
+                    <h3 class="text-lg font-semibold text-gray-800 p-4">Table 2</h3>
+                    <div class="overflow-y-auto h-full px-4">
+                        <table class="w-full text-left text-gray-600">
+                            <thead>
+                                <tr class="text-gray-800">
+                                    <th class="py-2">Column 1</th>
+                                    <th class="py-2">Column 2</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td class="py-2">Row 1</td><td class="py-2">Data</td></tr>
+                                <tr><td class="py-2">Row 2</td><td class="py-2">Data</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Table 3 -->
+                <div class="bg-white shadow rounded-lg overflow-hidden h-48">
+                    <h3 class="text-lg font-semibold text-gray-800 p-4">Table 3</h3>
+                    <div class="overflow-y-auto h-full px-4">
+                        <table class="w-full text-left text-gray-600">
+                            <thead>
+                                <tr class="text-gray-800">
+                                    <th class="py-2">Column 1</th>
+                                    <th class="py-2">Column 2</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td class="py-2">Row 1</td><td class="py-2">Data</td></tr>
+                                <tr><td class="py-2">Row 2</td><td class="py-2">Data</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript for Toggling Sections, Sidebar, and Initializing Chart -->
+<script>
+    // Toggle sidebar visibility
+    document.getElementById('sidebar-toggle').addEventListener('click', function() {
+        const sidebar = document.getElementById('sidebar');
+        sidebar.classList.toggle('-translate-x-full');
+    });
+
+    function showDetails(projectName) {
+        document.getElementById("projects-table").classList.add("hidden");
+        document.getElementById("details-section").classList.remove("hidden");
+        document.getElementById("project-title").innerText = projectName;
+        document.getElementById("project-category").innerText = "Development"; // Example data, adjust as needed
+
+        renderChart();
+    }
+
+    function hideDetails() {
+        document.getElementById("projects-table").classList.remove("hidden");
+        document.getElementById("details-section").classList.add("hidden");
+    }
+
+    function renderChart() {
+        var options = {
+            chart: {
+                type: 'pie',
+                height: '100%'
+            },
+            series: [75, 25], // 75% utilized, 25% available
+            labels: ['Utilized', 'Available'],
+            colors: ['#4F46E5', '#E0E7FF'],
+            legend: {
+                position: 'bottom'
+            },
+            tooltip: {
+                y: {
+                    formatter: function(value) {
+                        return value + '%'
+                    }
+                }
+            },
+            responsive: [{
+                breakpoint: 480,
+                options: {
+                    chart: {
+                        width: 200
+                    },
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }]
+        };
+        
+        var chart = new ApexCharts(document.querySelector("#chart"), options);
+        chart.render();
+    }
+</script>
+
+
+<script>
+    function showBudgetForm() {
+        Swal.fire({
+            title: 'Enter Budget Details',
+            html: `
+                <form id="budget-form">
+                    <label for="budget-amount">Amount:</label>
+                    <input type="number" id="budget-amount" class="swal2-input" placeholder="Enter amount" required><br><br>
+                    <label for="budget-description">Description:</label>
+                    <textarea id="budget-description" class="swal2-textarea" placeholder="Enter description" required></textarea>
+                </form>
+            `,
+            showCancelButton: true,
+            confirmButtonText: 'Submit',
+            cancelButtonText: 'Cancel',
+            preConfirm: () => {
+                const amount = document.getElementById('budget-amount').value;
+                const description = document.getElementById('budget-description').value;
+                if (!amount || !description) {
+                    Swal.showValidationMessage('Please fill in all fields');
+                    return false;
+                }
+                // Handle form submission here (e.g., save to DB or perform an action)
+                console.log('Budget Submitted:', amount, description);
+            }
+        });
+    }
+
+    function showObligationForm() {
+        Swal.fire({
+            title: 'Enter Obligation Details',
+            html: `
+                <form id="obligation-form">
+                    <label for="obligation-amount">Amount:</label>
+                    <input type="number" id="obligation-amount" class="swal2-input" placeholder="Enter amount" required><br><br>
+                    <label for="obligation-description">Description:</label>
+                    <textarea id="obligation-description" class="swal2-textarea" placeholder="Enter description" required></textarea>
+                </form>
+            `,
+            showCancelButton: true,
+            confirmButtonText: 'Submit',
+            cancelButtonText: 'Cancel',
+            preConfirm: () => {
+                const amount = document.getElementById('obligation-amount').value;
+                const description = document.getElementById('obligation-description').value;
+                if (!amount || !description) {
+                    Swal.showValidationMessage('Please fill in all fields');
+                    return false;
+                }
+                // Handle form submission here (e.g., save to DB or perform an action)
+                console.log('Obligation Submitted:', amount, description);
+            }
+        });
+    }
+</script>
+
+</body>
+</html>
