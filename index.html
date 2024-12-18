@@ -11,18 +11,18 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 </head>
-<body class="bg-gray-100 flex">
+<body class="bg-gray-100 flex relative">
 
-<!-- Sidebar -->
-<div id="sidebar" class="bg-gray-800 text-white w-64 h-screen fixed top-0 left-0 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out">
+ <!-- Sidebar -->
+ <div id="sidebar" class="bg-gray-800 text-white w-64 h-screen fixed top-0 left-0 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out z-50">
     <div class="p-6">
         <h2 class="text-2xl font-semibold">Dashboard</h2>
         <ul class="mt-4">
             <li class="mb-4 hover:bg-gray-700 p-2 rounded-md">
-                <a href="javascript:void(0)" onclick="">Project Alpha</a>
+                <a href="javascript:void(0)">Project Alpha</a>
             </li>
             <li class="mb-4 hover:bg-gray-700 p-2 rounded-md">
-                <a href="javascript:void(0)" onclick="">Project Beta</a>
+                <a href="javascript:void(0)">Project Beta</a>
             </li>
             <!-- Add more items as necessary -->
         </ul>
@@ -30,13 +30,15 @@
 </div>
 
 <!-- Main Content -->
-<div class="flex-1 ml-0 md:ml-64 transition-all duration-300 ease-in-out">
+<div class="flex-1 ml-0 md:ml-64 transition-all duration-300 ease-in-out" id="main">
     <!-- Mobile Sidebar Toggle Button -->
     <button id="sidebar-toggle" class="md:hidden p-4 text-gray-800">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
         </svg>
     </button>
+        <!-- Overlay (for small screens when sidebar is open) -->
+        <div id="overlay" class="hidden fixed inset-0 bg-black bg-opacity-50 z-40"></div>
 
     <div class="container mx-auto p-6">
 <!-- Projects Table --> 
@@ -45,59 +47,68 @@
 
     <!-- Search Bar and Category Filter -->
     <div class="flex items-center space-x-4 p-4">
-
-           <!-- Category Filter Dropdown -->
-           <select 
-           id="category-select" 
-           class="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-           <option value="">Recently Added</option>
-           <option value="Development">Oldest</option>
-       
-           <!-- Add more categories as needed -->
-       </select>
+        <!-- Category Filter Dropdown -->
+        <select 
+            id="category-select" 
+            class="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option value="">Recently Added</option>
+            <option value="Development">Oldest</option>
+            <!-- Add more categories as needed -->
+        </select>
+        
         <!-- Search Bar -->
         <input 
             type="text" 
             id="search-bar" 
             class="p-2 border border-gray-300 rounded-md w-1/3 focus:outline-none focus:ring-2 focus:ring-blue-500" 
             placeholder="Search projects...">
-
-     
     </div>
 
-    <table class="w-full text-left text-gray-700">
-        <thead>
-            <tr class="bg-gray-200 text-gray-800">
-                <th class="py-3 px-6">Project Name</th>
-                <th class="py-3 px-6">Category</th>
-                <th class="py-3 px-6">Status</th>
-                <th class="py-3 px-6">Add</th>
-                <th class="py-3 px-6">Action</th>
-            </tr>
-        </thead>
-        <tbody id="projects-tbody">
-            <tr class="cursor-pointer hover:bg-gray-100">
-                <td class="py-3 px-6" onclick="showDetails('Project Alpha')">Support to RA 9003 Projects of 11 Brgys ahsdihgadiga asgdia gdiah</td>
-                <td class="py-3 px-6" onclick="showDetails('Project Alpha')">Development</td>
-                <td class="py-3 px-6" onclick="showDetails('Project Alpha')">Ongoing</td>
-                <td class="py-3 px-6">
-                    <button class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600" onclick="showBudgetForm()">Budget</button>
-                    <button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-2" onclick="showObligationForm()">Obligation</button>
-                </td>
-                <td class="py-3 px-6">
-                    <button class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600">Update</button>
-                    <button class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 mt-2" onclick="showDeleteConfirmation('12345')">Delete</button>
-                </td>
-            </tr>
-            <!-- More rows as needed -->
-        </tbody>
-    </table>
+    <div class="overflow-x-auto">
+        <table class="w-full text-left text-gray-700">
+            <thead>
+                <tr class="bg-gray-200 text-gray-800">
+                    <th class="py-3 px-6">Project Name</th>
+                    <th class="py-3 px-6">Category</th>
+                    <th class="py-3 px-6">Status</th>
+                    <th class="py-3 px-6">Add</th>
+                    <th class="py-3 px-6">Action</th>
+                </tr>
+            </thead>
+            <tbody id="projects-tbody">
+                <tr class="cursor-pointer hover:bg-gray-100">
+                    <td class="py-3 px-6" onclick="showDetails('Project Alpha')">Support to RA 9003 Projects of 11 Brgys ahsdihgadiga asgdia gdiah</td>
+                    <td class="py-3 px-6" onclick="showDetails('Project Alpha')">Development</td>
+                    <td class="py-3 px-6" onclick="showDetails('Project Alpha')">Ongoing</td>
+                    <td class="py-3 px-6">
+                        <button class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600" onclick="showBudgetForm()">Budget</button>
+                        <button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-2" onclick="showObligationForm()">Obligation</button>
+                    </td>
+                    <td class="py-3 px-6">
+                        <button class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600">Update</button>
+                        <button class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 mt-2" onclick="showDeleteConfirmation('12345')">Delete</button>
+                    </td>
+                </tr>
+                <!-- More rows as needed -->
+                <tr class="cursor-pointer bg-gray-100 hover:bg-white-100">
+                    <td class="py-3 px-6" onclick="showDetails('Project Alpha')">Support to RA 9003 Projects of 11 Brgys ahsdihgadiga asgdia gdiah</td>
+                    <td class="py-3 px-6" onclick="showDetails('Project Alpha')">Development</td>
+                    <td class="py-3 px-6" onclick="showDetails('Project Alpha')">Ongoing</td>
+                    <td class="py-3 px-6">
+                        <button class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600" onclick="showBudgetForm()">Budget</button>
+                        <button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-2" onclick="showObligationForm()">Obligation</button>
+                    </td>
+                    <td class="py-3 px-6">
+                        <button class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600">Update</button>
+                        <button class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 mt-2" onclick="showDeleteConfirmation('12345')">Delete</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
 
-
-
-
-        
+       
         <!-- Project Details Section -->
         <div id="details-section" class="hidden mt-8 max-w-6xl mx-auto p-6 bg-white shadow-lg rounded-lg">
             <button onclick="hideDetails()" class="text-gray-500 hover:text-gray-800">&larr; Back to Projects</button>
@@ -194,13 +205,36 @@
     </div>
 </div>
 
-<!-- JavaScript for Toggling Sections, Sidebar, and Initializing Chart -->
+
+
+
+
+
+
 <script>
-    // Toggle sidebar visibility
-    document.getElementById('sidebar-toggle').addEventListener('click', function() {
-        const sidebar = document.getElementById('sidebar');
+    const sidebarToggle = document.getElementById('sidebar-toggle');
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('overlay');
+    const body = document.body;
+
+    // Open sidebar and show overlay
+    sidebarToggle.addEventListener('click', () => {
         sidebar.classList.toggle('-translate-x-full');
+        overlay.style.display = sidebar.classList.contains('-translate-x-full') ? 'none' : 'block';
     });
+
+    // Close sidebar when clicking outside
+    overlay.addEventListener('click', () => {
+        sidebar.classList.add('-translate-x-full');
+        overlay.style.display = 'none';
+    });
+</script>
+
+
+
+<!-- JavaScript for Details -->
+<script>
+   
 
     function showDetails(projectName) {
         document.getElementById("projects-table").classList.add("hidden");
@@ -255,31 +289,34 @@
 <!-- Budget -->
 <script>
     function showBudgetForm() {
+        // Apply the blur effect to the main content
+        document.getElementById('main').style.filter = 'blur(10px)';
+
         Swal.fire({
             title: 'Enter Budget Details',
             html: `
-            <form id="budget-form" class="space-y-4">
-                <!-- Hidden Entry Code Field -->
-                <input type="hidden" id="entry-code" name="entry_code" value="12345"> 
+                <form id="budget-form" class="space-y-4">
+                    <!-- Hidden Entry Code Field -->
+                    <input type="hidden" id="entry-code" name="entry_code" value="12345"> 
 
-                <!-- Budget Name Field -->
-                <div class="flex items-center space-x-4">
-                    <label for="budget-name" class="font-medium text-gray-700 w-1/4">Budget Name:</label>
-                    <input type="text" id="budget-name" class="swal2-input w-3/4 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter budget name" required>
-                </div>
+                    <!-- Budget Name Field -->
+                    <div class="flex items-center space-x-4">
+                        <label for="budget-name" class="font-medium text-gray-700 w-1/4">Budget Name:</label>
+                        <input type="text" id="budget-name" class="swal2-input w-3/4 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter budget name" required>
+                    </div>
 
-                <!-- Budget Amount Field -->
-                <div class="flex items-center space-x-4">
-                    <label for="budget-amount" class="font-medium text-gray-700 w-1/4">Amount:</label>
-                    <input type="number" id="budget-amount" class="swal2-input w-3/4 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter amount" required>
-                </div>
+                    <!-- Budget Amount Field -->
+                    <div class="flex items-center space-x-4">
+                        <label for="budget-amount" class="font-medium text-gray-700 w-1/4">Amount:</label>
+                        <input type="number" id="budget-amount" class="swal2-input w-3/4 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter amount" required>
+                    </div>
 
-                <!-- Budget Date Field -->
-                <div class="flex items-center space-x-4">
-                    <label for="budget-date" class="font-medium text-gray-700 w-1/4">Budget Date:</label>
-                    <input type="date" id="budget-date" class="swal2-input w-3/4 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-                </div>
-            </form>
+                    <!-- Budget Date Field -->
+                    <div class="flex items-center space-x-4">
+                        <label for="budget-date" class="font-medium text-gray-700 w-1/4">Budget Date:</label>
+                        <input type="date" id="budget-date" class="swal2-input w-3/4 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                    </div>
+                </form>
             `,
             showCancelButton: true,
             confirmButtonText: 'Submit',
@@ -288,16 +325,19 @@
             preConfirm: () => {
                 const name = document.getElementById('budget-name').value;
                 const amount = document.getElementById('budget-amount').value;
-           
                 const date = document.getElementById('budget-date').value;
 
-                if (!name || !amount || !description || !date) {
+                if (!name || !amount || !date) {
                     Swal.showValidationMessage('Please fill in all fields');
                     return false;
                 }
 
                 // Handle form submission here (e.g., save to DB or perform an action)
-                console.log('Budget Submitted:', { name, amount, description, date });
+                console.log('Budget Submitted:', { name, amount, date });
+            },
+            willClose: () => {
+                // Remove the blur effect when the modal is closed (either confirmed or canceled)
+                document.getElementById('main').style.filter = 'none';
             }
         });
     }
